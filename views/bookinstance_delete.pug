@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 #{title}: #{bookinstance.imprint}
+    if bookinstance.status==='Loaned'
+
+        h4 Book Instance record says #[em #[strong LOANED!]]
+        p #[strong You cannot delete the Book Instance of a loaned book.]
+        p Retry when the loaned book has been returned.
+
+    else
+        p Do you really want to delete this book instance?
+
+        form(method='POST' action='')
+            div.form-group
+                input#bookinstanceid.form-control(type='hidden', name='bookinstanceid', required='true', value=bookinstance._id)
+
+            button.btn.btn-primary(type='submit') Delete
