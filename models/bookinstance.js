@@ -1,4 +1,4 @@
-//Schema for bokinstance model
+//Schema for bookinstance model
 var moment = require('moment');
 var mongoose = require('mongoose');
 
