@@ -9,7 +9,7 @@ block content
             input#first_name.form-control(type='text' placeholder='First name (Juliana)' name='first_name' required='true' value=(undefined===user ? '' : user.first_name) )
         div.form-group
             label(for='last_name') Last Name:
-            input#last_name.form-control(type='text' placeholder='Last name or Surname (Merkel)' name='last-name' required='true' value=(undefined===user ? '' : user.last_name) )
+            input#last_name.form-control(type='text' placeholder='Last name or Surname (Merkel)' name='last_name' required='true' value=(undefined===user ? '' : user.last_name) )
         div.form-group
             label(for='email') Email Address:
             input#email.form-control(type='text' placeholder='xyz@abc.com' name='email' required='true' value=(undefined===user ? '' : user.email ) )
@@ -30,3 +30,6 @@ block content
         ul
             for error in errors
                 li!= error.msg
+    hr
+    p
+        a(href='/users/login') Log In
