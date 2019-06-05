@@ -45,13 +45,22 @@ exports.user_signup_post = [
                     password: req.body.password
                 });
             
-            user.save(function (err) {
-                if (err) {
-                    return next(err);
-                };
-                res.redirect('/catalog');
+            User.findOne({email: user.email}, function (err, results) {
+                if (err || results == null) {
+                    user.save(function (err) {
+                        if (err) {
+                            return next(err);
+                        };
+                        res.redirect('/catalog');
+                    });
+                    return;
+                } else if (results !== null) {
+                    res.render('signup', {title: 'Account already exists.', user: req.body});
+                    return;
+                }
             });
-        }
+            
+        };
 
     }
 
@@ -84,24 +93,16 @@ exports.user_login_post = [
                 password: req.body.password
             });
 
-            console.log('User: \n' + user);
-
-            User.find({}, 'email password')
-            .exec(function (err, results) {
-                console.log('Database Users: \n' + results); //Returned an array
-                if (err) {
-                    return next(err);
-                } 
-
-                for (let i = 0; i < results.length; i++) {
-                    if (results[i].email === user.email && results[i].password === user.password) {
-                        res.redirect('/catalog');
-                        return;
-                    }
-                };
-
-                res.render('login', {title: 'Email and/or Password Incorrect', user: req.body});
+            User.find({email: user.email, password: user.password}, function (err, results) {
+                console.log(results);
+                if (err || results.length === 0) {
+                    res.render('login', {title: 'Email and/or Password Incorrect', user: req.body});                    
+                    return;
+                } else {
+                    res.redirect('/catalog');
+                    return;
+                }
             });
-        }
+        };
     }
 ]
