@@ -2,3 +2,31 @@ extends layoutenter
 
 block content
     h1=title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='first_name') First Name:
+            input#first_name.form-control(type='text' placeholder='First name (Juliana)' name='first_name' required='true' value=(undefined===user ? '' : user.first_name) )
+        div.form-group
+            label(for='last_name') Last Name:
+            input#last_name.form-control(type='text' placeholder='Last name or Surname (Merkel)' name='last-name' required='true' value=(undefined===user ? '' : user.last_name) )
+        div.form-group
+            label(for='email') Email Address:
+            input#email.form-control(type='text' placeholder='xyz@abc.com' name='email' required='true' value=(undefined===user ? '' : user.email ) )
+        div.form-group
+            label(for='gender') Gender: 
+            select#gender.form-control(type='select' placeholder='Select Gender' name='gender' required='true')
+                option(value='Male') Male
+                option(value='Female') Female
+        div.form-group
+            label(for='date_of_birth') Date of Birth: 
+            input#date_of_birth.form-control(type='date' name='date_of_birth' value=(undefined===user? '' : user.date_of_birth) )
+        div.form-group
+            label(for='password') Password: 
+            input#password.form-control(type='password' placeholder='******' name='password' required='true' value=(undefined===user ? '' : user.password) )
+        div.form-group
+            button.btn.btn-primary(type='submit') Sign Up
+    if errors
+        ul
+            for error in errors
+                li!= error.msg

@@ -2,3 +2,17 @@ extends layoutenter
 
 block content
     h1=title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='email') Email: 
+            input#email.form-control(type='email' placeholder='xyz@abc.com' name='email' required='true' value=(undefined===user ? '' : user.email) )
+        div.form-group
+            label(for='password') Password: 
+            input#password.form-control(type='password' placeholder='******' name='password' required='true' value=(undefined===user ? '' : user.password) )
+        div.form-group
+            button.btn.btn-primary(type='submit') Login
+    if errors
+        ul
+            for error in errors
+                li!= error.msg
