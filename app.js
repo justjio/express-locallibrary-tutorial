@@ -4,9 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//Added new catalog route below
 var catalogRouter = require('./routes/catalog');
 
 //Require compression
@@ -31,6 +31,9 @@ app.set('view engine', 'pug');
 
 //Add helmet as a middleware
 app.use(helmet());
+
+//Add session
+
 
 app.use(logger('dev'));
 app.use(express.json());

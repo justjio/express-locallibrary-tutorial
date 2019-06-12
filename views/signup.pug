@@ -12,7 +12,7 @@ block content
             input#last_name.form-control(type='text' placeholder='Last name or Surname (Merkel)' name='last_name' required='true' value=(undefined===user ? '' : user.last_name) )
         div.form-group
             label(for='email') Email Address:
-            input#email.form-control(type='text' placeholder='xyz@abc.com' name='email' required='true' value=(undefined===user ? '' : user.email ) )
+            input#email.form-control(type='email' placeholder='xyz@abc.com' name='email' required='true' value=(undefined===user ? '' : user.email ) )
         div.form-group
             label(for='gender') Gender: 
             select#gender.form-control(type='select' placeholder='Select Gender' name='gender' required='true')

@@ -74,7 +74,7 @@ exports.user_login_get = function(req, res, next) {
 //Handle Login form on POST
 exports.user_login_post = [
 
-    body('email', 'Email must be specified').isLength({min: 1}).trim(),
+    body('email', 'Email must be specified.').isLength({min: 1}).trim(),
     body('password', 'Password cannot be blank.').isLength({min: 1}).trim(),
 
     sanitizeBody('*').escape(),
@@ -102,6 +102,74 @@ exports.user_login_post = [
                     res.redirect('/catalog');
                     return;
                 }
+            });
+        };
+    }
+]
+
+exports.forgot_password_get = function (req, res, next) {
+    res.render('forgotpassword', {title: 'Enter your Sign Up Email'});
+};
+
+exports.forgot_password_post = [
+
+    body('email', 'Email must be specified.').isLength({min: 1}).trim(),
+    
+    sanitizeBody('*').escape(),
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()) {
+            res.render('forgotpassword', {title: 'Enter correct Sign Up email.', user: req.body, errors: errors.array()});
+        }
+        else {
+            User.find({email: req.body.email}, function (err, results) {
+                console.log("\n User Details: \n" + results + "\n");
+                if (err || results.length === 0) {
+                    res.render('forgotpassword', {title: 'Email not in our Record.', user: req.body});
+                    return;
+                } else {
+                    res.cookie('user', results[0]._id);
+                    console.log('\n REQ.COOKIE now: \n' + req.cookies.user + '\n');
+                    res.redirect('/users/changepassword');
+                    return;
+                };
+            });
+        };
+    }
+
+]
+
+exports.change_password_get = function (req, res, next) {
+    console.log(typeof req.cookies['user']);
+    console.log("\n User Data Retrieved:" + req.cookies['user'] + "\n");
+    res.render('changepassword', {title: 'Change Password'});
+};
+
+exports.change_password_post = [
+
+    body('password_1', 'Password must be specified.').isLength({min: 1}).trim(),
+    body('password_2', 'Password must be specified.').isLength({min: 1}).trim(),
+
+    sanitizeBody('*').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.render('changepassword', {title: 'Change Password', user: req.body, errors: errors.array()});
+        } 
+        else if (req.body.password_1 !== req.body.password_2) {
+            res.render('changepassword', {title: 'Passwords do not match', user: req.body});
+        } 
+        else if (req.body.password_1 === req.body.password_2) {
+            User.findByIdAndUpdate(req.cookies['user'], {password: req.body.password_1}, function (err) {
+                if (err) {return next(err)};
+                
+                res.clearCookie('user');
+                res.redirect('/users/login');
             });
         };
     }
