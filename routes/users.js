@@ -32,4 +32,7 @@ router.get('/changepassword', user_controller.change_password_get);
 //POST Change password form
 router.post('/changepassword', user_controller.change_password_post);
 
+//Logout User GET
+router.get('/logout', user_controller.logout);
+
 module.exports = router;

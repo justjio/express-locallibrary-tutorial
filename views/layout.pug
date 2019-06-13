@@ -36,4 +36,6 @@ html(lang='en')
                 a(href='/catalog/bookinstance/create') Create new book instance (copy)
                 
         div(class='col-sm-10')
+          hr 
+          p Hello #[strong #[em !{user[0].last_name} !{user[0].first_name}]].
           block content

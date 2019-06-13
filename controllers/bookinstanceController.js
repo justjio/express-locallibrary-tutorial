@@ -14,7 +14,7 @@ exports.bookinstance_list = function(req, res, next) {
       .exec(function (err, list_bookinstances) {
         if (err) { return next(err); }
         // Successful, so render
-        res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances });
+        res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances, user: req.cookies['user'] });
       });
       
 };
@@ -32,7 +32,7 @@ exports.bookinstance_detail = function(req, res, next) {
           return next(err);
         }
       // Successful, so render.
-      res.render('bookinstance_detail', { title: 'Book:', bookinstance:  bookinstance});
+      res.render('bookinstance_detail', { title: 'Book:', bookinstance:  bookinstance, user: req.cookies['user']});
     })
 
 };
@@ -44,7 +44,7 @@ exports.bookinstance_create_get = function(req, res, next) {
     .exec(function (err, books) {
       if (err) { return next(err); }
       // Successful, so render.
-      res.render('bookinstance_form', {title: 'Create BookInstance', book_list: books});
+      res.render('bookinstance_form', {title: 'Create BookInstance', book_list: books, user: req.cookies['user']});
     });
     
 };
@@ -83,7 +83,7 @@ exports.bookinstance_create_post = [
                 .exec(function (err, books) {
                     if (err) { return next(err); }
                     // Successful, so render.
-                    res.render('bookinstance_form', { title: 'Create BookInstance', book_list: books, selected_book: bookinstance.book._id , errors: errors.array(), bookinstance: bookinstance });
+                    res.render('bookinstance_form', { title: 'Create BookInstance', book_list: books, selected_book: bookinstance.book._id , errors: errors.array(), bookinstance: bookinstance, user: req.cookies['user'] });
             });
             return;
         }
@@ -105,7 +105,7 @@ exports.bookinstance_delete_get = function(req, res, next) {
         if (bookinstance == null) {
             res.redirect('/catalog/bookinstances');
         };
-        res.render('bookinstance_delete', { title: 'Delete Book Instance', bookinstance: bookinstance});
+        res.render('bookinstance_delete', { title: 'Delete Book Instance', bookinstance: bookinstance, user: req.cookies['user']});
     });
 };
 
@@ -114,7 +114,7 @@ exports.bookinstance_delete_post = function(req, res, next) {
     BookInstance.findById(req.body.bookinstanceid).exec( function(err, bookinstance) {
         if (err) {return next(err);};
         if (bookinstance.status === 'Loaned') {
-            res.render('bookinstance_delete', { title: "Delete Book Instance", bookinstance: bookinstance});
+            res.render('bookinstance_delete', { title: "Delete Book Instance", bookinstance: bookinstance, user: req.cookies['user']});
         } else {
             BookInstance.findByIdAndRemove(req.body.bookinstanceid, function deleteBookInstance(err) {
                 if (err) {return next(err);};
@@ -141,7 +141,7 @@ exports.bookinstance_update_get = function(req, res, next) {
             err.status = 404;
             return next(err);
         };
-        res.render('bookinstance_form', { title: 'Update Book Instance', book_list: results.books, bookinstance: results.bookinstance});
+        res.render('bookinstance_form', { title: 'Update Book Instance', book_list: results.books, bookinstance: results.bookinstance, user: req.cookies['user']});
     });
 };
 
@@ -171,7 +171,7 @@ exports.bookinstance_update_post = [
         if (!errors.isEmpty()) {
             Book.find().exec(function (err, books) {
                 if (err) {return next(err);};
-                res.render('bookinstance_form', { title: 'Update Book Instance', book_list: books, errors: errors.array(), bookinstance: bookinstance});
+                res.render('bookinstance_form', { title: 'Update Book Instance', book_list: books, errors: errors.array(), bookinstance: bookinstance, user: req.cookies['user']});
             });
             return;
         }

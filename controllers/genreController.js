@@ -14,7 +14,7 @@ exports.genre_list = function(req, res) {
     .exec(function (err, list_genres) {
         if (err) {return next(err);}
         //Successful, so render
-        res.render('genre_list', {title: 'Genre List', genre_list: list_genres});
+        res.render('genre_list', {title: 'Genre List', genre_list: list_genres, user: req.cookies['user']});
     });
 };
 
@@ -40,14 +40,14 @@ exports.genre_detail = function(req, res, next) {
             return next(err);
         }
         // Successful, so render
-        res.render('genre_detail', { title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books } );
+        res.render('genre_detail', { title: 'Genre Detail', genre: results.genre, genre_books: results.genre_books, user: req.cookies['user'] } );
     });
 
 };
 
 // Display Genre create form on GET.
 exports.genre_create_get = function(req, res, next) {     
-    res.render('genre_form', { title: 'Create Genre' });
+    res.render('genre_form', { title: 'Create Genre', user: req.cookies['user']});
   };
 
 // Handle Genre create on POST.
@@ -73,7 +73,7 @@ exports.genre_create_post =  [
   
       if (!errors.isEmpty()) {
         // There are errors. Render the form again with sanitized values/error messages.
-        res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array()});
+        res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array(), user: req.cookies['user']});
         return;
       }
       else {
@@ -117,7 +117,7 @@ exports.genre_delete_get = function(req, res, next) {
     if (results.genre == null) {
       res.redirect('/catalog/genres');
     };
-    res.render('genre_delete', { title: 'Delete Genre', genre: results.genre, genre_books: results.genre_books});
+    res.render('genre_delete', { title: 'Delete Genre', genre: results.genre, genre_books: results.genre_books, user: req.cookies['user']});
   });
 };
 
@@ -134,7 +134,7 @@ exports.genre_delete_post = function(req, res, next) {
   }, function(err, results) {
     if (err) { return next(err); }
     if (results.genre_books.length > 0) {
-      res.render('genre_delete', { title: 'Delete Genre', genre: results.genre, genre_books: results.genre_books});
+      res.render('genre_delete', { title: 'Delete Genre', genre: results.genre, genre_books: results.genre_books, user: req.cookies['user']});
       return;
     } else {
       Genre.findByIdAndRemove(req.body.genreid, function deleteGenre(err) {
@@ -158,7 +158,7 @@ exports.genre_update_get = function(req, res, next) {
       return next(err);
     };
 
-    res.render('genre_form', { title: 'Update Genre', genre: genre});
+    res.render('genre_form', { title: 'Update Genre', genre: genre, user: req.cookies['user']});
   });
 };
 
@@ -178,7 +178,7 @@ exports.genre_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      res.render('genre_form', { title: 'Update Genre', genre: genre, errors: errors.array()});
+      res.render('genre_form', { title: 'Update Genre', genre: genre, errors: errors.array(), user: req.cookies['user']});
       return;
     } else {
       Genre.findByIdAndUpdate(req.params.id, genre, {}, function (err, thegenre) {

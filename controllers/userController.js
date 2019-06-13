@@ -99,6 +99,7 @@ exports.user_login_post = [
                     res.render('login', {title: 'Email and/or Password Incorrect', user: req.body});                    
                     return;
                 } else {
+                    res.cookie('user', results);
                     res.redirect('/catalog');
                     return;
                 }
@@ -174,3 +175,8 @@ exports.change_password_post = [
         };
     }
 ]
+
+exports.logout = function(req, res, next) {
+    res.clearCookie('user');
+    res.redirect('/users/login');
+}
